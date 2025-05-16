@@ -142,6 +142,22 @@
     });
   </script>
 
+  <script>
+    // Remove the default chatbot placeholder if it appears
+    // This script will run after DOMContentLoaded and remove any element containing the text
+    // 'Chatbot Placeholder for Build Test' (case-insensitive)
+    document.addEventListener('DOMContentLoaded', function() {
+      // Remove any element containing the placeholder text
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, null, false);
+      let node;
+      while ((node = walker.nextNode())) {
+        if (node.textContent && node.textContent.toLowerCase().includes('chatbot placeholder for build test')) {
+          node.remove();
+        }
+      }
+    });
+  </script>
+
   <!-- Our custom chat widget that will replace the problematic one -->
   <div id="our-custom-chat" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
     <div id="chat-popup" style="display: none; width: 300px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); overflow: hidden;">
