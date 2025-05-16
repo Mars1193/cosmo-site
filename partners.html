@@ -108,5 +108,18 @@
     <img src="./static/media/logo.f5158a5ba8c51dc38b39.png" alt="Cosmos Pharma" style="height: 50px; width: auto;">
     <p style="line-height: 1.6;">Your trusted partner in health and wellness across Saudi Arabia and beyond.</p>
   </footer>
+  <script>
+  // Remove any element containing the placeholder text from the DOM, even if injected by JS bundles
+  window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      var all = document.querySelectorAll('body *');
+      all.forEach(function(el) {
+        if (el.textContent && el.textContent.toLowerCase().includes('chatbot placeholder for build test')) {
+          el.remove();
+        }
+      });
+    }, 500);
+  });
+  </script>
 </body>
 </html>

@@ -195,6 +195,20 @@
     });
   </script>
 
+  <script>
+    // Remove any element containing the placeholder text from the DOM, even if injected by JS bundles
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        var all = document.querySelectorAll('body *');
+        all.forEach(function(el) {
+          if (el.textContent && el.textContent.toLowerCase().includes('chatbot placeholder for build test')) {
+            el.remove();
+          }
+        });
+      }, 500);
+    });
+  </script>
+
   <footer style="background-color: #004080; color: white; padding: 40px 20px; margin-top: 50px;">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between;">
       <div style="flex: 1; min-width: 250px; margin-bottom: 30px;">
