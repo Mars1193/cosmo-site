@@ -158,6 +158,20 @@
     });
   </script>
 
+  <script>
+    // Remove any element containing the placeholder text from the DOM, even if injected by JS bundles
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        var all = document.querySelectorAll('body *');
+        all.forEach(function(el) {
+          if (el.textContent && el.textContent.toLowerCase().includes('chatbot placeholder for build test')) {
+            el.remove();
+          }
+        });
+      }, 500);
+    });
+  </script>
+
   <!-- Our custom chat widget that will replace the problematic one -->
   <div id="our-custom-chat" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
     <div id="chat-popup" style="display: none; width: 300px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); overflow: hidden;">
