@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Our Products - Cosmos Pharma</title>
+  <link rel="icon" href="/favicon.ico"/>
+  <link rel="apple-touch-icon" href="/logo192.png"/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link href="/static/css/main.e6c13ad2.css" rel="stylesheet">
+  <style>
+    body { font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif; margin: 0; background: #fff; }
+    .products-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .products-title { text-align: center; margin-bottom: 2rem; color: #333; }
+    .category-container { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+    .category-btn { padding: 0.5rem 1rem; background-color: #f0f0f0; color: #333; border: none; border-radius: 4px; cursor: pointer; transition: all 0.3s ease; }
+    .category-btn.active, .category-btn:focus { background-color: #007bff; color: white; }
+    .category-btn:hover { background-color: #e0e0e0; }
+    .search-bar { width: 100%; padding: 0.75rem; margin-bottom: 2rem; border: 1px solid #ddd; border-radius: 4px; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; }
+    .product-card { border: 1px solid #eee; border-radius: 8px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; background: #fff; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    .product-image { height: 200px; background-color: #f8f9fa; background-size: contain; background-position: center; background-repeat: no-repeat; }
+    .product-info { padding: 1rem; }
+    .product-name { margin: 0 0 0.5rem 0; color: #333; }
+    .product-description { color: #666; font-size: 0.9rem; margin-bottom: 1rem; }
+    .product-specs { font-size: 0.8rem; color: #888; }
+    @media (max-width: 768px) { .product-grid { grid-template-columns: 1fr; } }
+  </style>
+  <script>
+    // Product data
+    const categories = [
+      { id: 'all', name: 'All Products' },
+      { id: 'painRelief', name: 'Pain Relief' },
+      { id: 'vitamins', name: 'Vitamins & Supplements' },
+      { id: 'antibiotics', name: 'Antibiotics' },
+      { id: 'skincare', name: 'Skincare' }
+    ];
+    const products = [
+      { id: 1, name: 'CosmoPain Relief', category: 'painRelief', description: 'A fast-acting pain relief medication designed to alleviate moderate to severe pain with minimal side effects.', image: 'https://via.placeholder.com/300x200?text=Pain+Relief', specs: 'Active Ingredient: Paracetamol 500mg | Format: Tablets | Package: 20 tablets' },
+      { id: 2, name: 'CosmoVit Complex', category: 'vitamins', description: 'A comprehensive multivitamin formula supporting overall health and wellbeing with essential vitamins and minerals.', image: 'https://via.placeholder.com/300x200?text=Vitamin+Complex', specs: 'Key Ingredients: Vitamins A, B, C, D, E, Zinc, Magnesium | Format: Capsules | Package: 60 capsules' },
+      { id: 3, name: 'CosmoAntibio', category: 'antibiotics', description: 'A broad-spectrum antibiotic effective against a wide range of bacterial infections.', image: 'https://via.placeholder.com/300x200?text=Antibiotic', specs: 'Active Ingredient: Amoxicillin 500mg | Format: Capsules | Package: 15 capsules' },
+      { id: 4, name: 'CosmoSkin Repair', category: 'skincare', description: 'Advanced skin repair cream that accelerates healing and reduces scarring for damaged skin.', image: 'https://via.placeholder.com/300x200?text=Skin+Care', specs: 'Key Ingredients: Aloe Vera, Vitamin E, Collagen | Format: Cream | Package: 50ml tube' },
+      { id: 5, name: 'CosmoVit D3', category: 'vitamins', description: 'High-potency Vitamin D3 supplement supporting bone health, immune function, and overall wellbeing.', image: 'https://via.placeholder.com/300x200?text=Vitamin+D3', specs: 'Active Ingredient: Vitamin D3 1000 IU | Format: Softgels | Package: 90 softgels' },
+      { id: 6, name: 'CosmoRelax', category: 'painRelief', description: 'Fast-acting muscle relaxant that relieves tension and spasms while reducing inflammation.', image: 'https://via.placeholder.com/300x200?text=Muscle+Relaxant', specs: 'Active Ingredient: Cyclobenzaprine 10mg | Format: Tablets | Package: 30 tablets' },
+      { id: 7, name: 'CosmoAcne Solution', category: 'skincare', description: 'Targeted acne treatment that reduces inflammation, unclogs pores, and prevents new breakouts.', image: 'https://via.placeholder.com/300x200?text=Acne+Treatment', specs: 'Key Ingredients: Salicylic Acid, Tea Tree Oil | Format: Gel | Package: 30ml tube' },
+      { id: 8, name: 'CosmoImmune', category: 'antibiotics', description: 'Powerful immune system support formula with natural ingredients to enhance resistance to infections.', image: 'https://via.placeholder.com/300x200?text=Immune+Booster', specs: 'Key Ingredients: Echinacea, Zinc, Vitamin C | Format: Tablets | Package: 45 tablets' }
+    ];
+    let activeCategory = 'all';
+    function renderCategories() {
+      const container = document.getElementById('category-container');
+      container.innerHTML = '';
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'category-btn' + (activeCategory === cat.id ? ' active' : '');
+        btn.textContent = cat.name;
+        btn.onclick = () => { activeCategory = cat.id; renderCategories(); renderProducts(); };
+        container.appendChild(btn);
+      });
+    }
+    function renderProducts() {
+      const searchTerm = document.getElementById('search-bar').value.toLowerCase();
+      const grid = document.getElementById('product-grid');
+      grid.innerHTML = '';
+      products.filter(product => {
+        const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
+        const matchesSearch = product.name.toLowerCase().includes(searchTerm) || product.description.toLowerCase().includes(searchTerm);
+        return matchesCategory && matchesSearch;
+      }).forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `<div class="product-image" style="background-image: url('${product.image}')"></div>
+          <div class="product-info">
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-description">${product.description}</p>
+            <div class="product-specs">${product.specs}</div>
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      renderCategories();
+      renderProducts();
+      document.getElementById('search-bar').addEventListener('input', renderProducts);
+    });
+  </script>
+</head>
+<body>
+  <div class="products-container">
+    <h1 class="products-title">Our Products</h1>
+    <div id="category-container" class="category-container"></div>
+    <input id="search-bar" class="search-bar" type="text" placeholder="Search products..." />
+    <div id="product-grid" class="product-grid"></div>
+  </div>
+</body>
+</html>
